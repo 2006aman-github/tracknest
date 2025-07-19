@@ -8,7 +8,7 @@ const Index = () => {
             description:
                 "Master modern web development with React, TypeScript, and Node.js. Build real-world projects and become a full-stack developer.",
             instructor: "Sarah Johnson",
-            image: "https://source.unsplash.com/featured/?web,code", // Placeholder image
+            image: "https://www.simplilearn.com/ice9/free_resources_article_thumb/is_web_development_good_career.jpg", // Placeholder image
             duration: "42h",
             students: 15234,
             rating: 4.8,
@@ -24,7 +24,7 @@ const Index = () => {
             description:
                 "Learn Python, statistics, machine learning algorithms, and AI. Complete hands-on projects with real datasets.",
             instructor: "Dr. Michael Chen",
-            image: "https://source.unsplash.com/featured/?data,ai", // Placeholder image
+            image: "https://www.mygreatlearning.com/blog/wp-content/uploads/2019/09/What-is-data-science-2.jpg", // Placeholder image
             duration: "56h",
             students: 8967,
             rating: 4.9,
@@ -40,7 +40,7 @@ const Index = () => {
             description:
                 "Build native iOS and Android apps using React Native. From basics to app store deployment.",
             instructor: "Alex Rodriguez",
-            image: "https://source.unsplash.com/featured/?mobile,app", // Placeholder image
+            image: "https://img.freepik.com/free-vector/app-development-banner_33099-1720.jpg?semt=ais_hybrid&w=740", // Placeholder image
             duration: "38h",
             students: 12543,
             rating: 4.7,

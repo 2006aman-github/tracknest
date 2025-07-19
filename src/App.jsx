@@ -5,7 +5,6 @@ function App() {
   return (
     <>
       <Router />
-      hey lets get started
     </>
   )
 }
