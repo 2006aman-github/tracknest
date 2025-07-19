@@ -14,12 +14,11 @@ function App() {
   //   }
   // }, [isAuth, navigate]);
 
-  return (
-    <>
+    return <>
       {/* {isAuth ? <Router /> : <Form />} */}
       <Router/>
     </>
-  );
+  
 }
 
 export default App;
