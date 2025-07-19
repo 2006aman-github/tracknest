@@ -2,6 +2,7 @@ import { Star, Clock, Users, Award, PlayCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLocation } from "react-router-dom";
 
 export const CourseCard = ({
     title,
@@ -18,7 +19,11 @@ export const CourseCard = ({
     isFeatured = false,
     isPremium = false,
     progress,
+    bought = false,
 }) => {
+    const location = useLocation();
+    const isEnr = location.pathname.includes("enrolled");
+
     const formatStudents = (count) => {
         if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
         return count.toString();
@@ -37,8 +42,14 @@ export const CourseCard = ({
         }
     };
 
+    const getButtonLabel = () => {
+        if (progress !== 0) return "Continue";
+        if (bought) return "Start Now";
+        return "Enroll Now";
+    };
+
     return (
-        <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2 cursor-pointer bg-white`}>
+        <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2 cursor-pointer bg-white">
             {(isFeatured || isPremium) && (
                 <div className="absolute top-4 left-4 z-10">
                     <Badge
@@ -124,22 +135,24 @@ export const CourseCard = ({
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-gray-900">
-                            ${price.current}
-                        </span>
-                        {price.original && (
-                            <span className="text-sm text-gray-500 line-through">
-                                ${price.original}
+                    {!isEnr && (
+                        <div className="flex items-center space-x-2">
+                            <span className="text-xl font-bold text-gray-900">
+                                ${price.current}
                             </span>
-                        )}
-                    </div>
+                            {price.original && (
+                                <span className="text-sm text-gray-500 line-through">
+                                    ${price.original}
+                                </span>
+                            )}
+                        </div>
+                    )}
 
                     <Button
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
                     >
-                        {progress !== undefined ? "Continue" : "Enroll Now"}
+                        {getButtonLabel()}
                     </Button>
                 </div>
             </div>

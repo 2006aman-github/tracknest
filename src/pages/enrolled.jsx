@@ -3,7 +3,7 @@ import Search from "@/components/search.jsx"
 import { CourseCard } from "../components/course-card"
 import { useSelector } from "react-redux"
 
-const Index = () => {
+function Enrolled() {
     const search = useSelector((s) => s.search.search.toLowerCase())
 
     const courses = [
@@ -76,19 +76,22 @@ const Index = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                    {filtered.map((course, index) => (
-                        <div
-                            key={course.id}
-                            className="animate-fade-in-up"
-                            style={{ animationDelay: `${index * 200}ms` }}
-                        >
-                            <CourseCard {...course} />
-                        </div>
-                    ))}
+                    {filtered.map((course, index) =>
+                        course.bought && (
+                            <div
+                                key={course.id}
+                                className="animate-fade-in-up"
+                                style={{ animationDelay: `${index * 200}ms` }}
+                            >
+                                <CourseCard {...course} />
+                            </div>
+                        )
+                    )}
                 </div>
+
             </div>
         </div>
     )
 }
 
-export default Index
+export default Enrolled

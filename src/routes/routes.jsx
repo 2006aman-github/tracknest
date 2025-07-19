@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Index from '@/pages/courses'
 import Form from '@/pages/forms/login.jsx'
+import Enrolled from '@/pages/enrolled.jsx'
 import CourseForm from "../pages/forms/AddCourse"
 
 export default function Router() {
@@ -10,6 +11,7 @@ export default function Router() {
             <Route path="/test" element={<h1>Testing</h1>} />
             <Route path="/courses" element={<Index/>} />
             <Route path="/login" element={<Form/>} />
+            <Route path="/enrolled" element={<Enrolled/>} />
             <Route path="/add-course" element={<CourseForm/>} />
         </Routes>
     )
