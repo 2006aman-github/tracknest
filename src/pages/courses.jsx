@@ -1,6 +1,5 @@
-import Search from "@/components/search.jsx";
+import Search from "../components/search.jsx";
 import { CourseCard } from "../components/course-card";
-
 const Index = () => {
     const courses = [
         {
