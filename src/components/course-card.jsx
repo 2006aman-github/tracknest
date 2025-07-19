@@ -18,6 +18,7 @@ export const CourseCard = ({
     isFeatured = false,
     isPremium = false,
     progress,
+    bought = false,
 }) => {
     const formatStudents = (count) => {
         if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
@@ -37,14 +38,20 @@ export const CourseCard = ({
         }
     };
 
+    const getButtonLabel = () => {
+        if (progress !== 0) return "Continue";
+        if (bought) return "Start Now";
+        return "Enroll Now";
+    };
+
     return (
-        <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2 cursor-pointer bg-white`}>
+        <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2 cursor-pointer bg-white">
             {(isFeatured || isPremium) && (
                 <div className="absolute top-4 left-4 z-10">
                     <Badge
                         className={`font-semibold px-3 py-1 ${isFeatured
-                            ? "bg-blue-600 text-white"
-                            : "bg-purple-600 text-white"
+                                ? "bg-blue-600 text-white"
+                                : "bg-purple-600 text-white"
                             }`}
                     >
                         {isFeatured ? "Featured" : "Premium"}
@@ -139,7 +146,7 @@ export const CourseCard = ({
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
                     >
-                        {progress !== undefined ? "Continue" : "Enroll Now"}
+                        {getButtonLabel()}
                     </Button>
                 </div>
             </div>
