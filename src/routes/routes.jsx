@@ -1,20 +1,34 @@
-import { Routes, Route } from 'react-router-dom'
-import Index from '@/pages/courses'
-import Form from '@/pages/forms/login.jsx'
-import Enrolled from '@/pages/enrolled.jsx'
+import { Routes, Route, Navigate } from "react-router-dom"
+import Login from "@/pages/forms/login"
+import Index from "@/pages/courses.jsx"
+import Enrolled from "@/pages/enrolled"
+import { useSelector } from "react-redux"
+
+function PrivateRoute({ children }) {
+    const isAuth = useSelector((state) => state.auth.isAuth)
+    return isAuth ? children : <Navigate to="/login" />
+}
 import CourseForm from "../pages/forms/AddCourse"
 import { userTypes } from "../lib/utils"
 import CourseView from "../pages/CourseDetails"
 import TrackView from "../pages/MyTrack"
 
-export default function Router() {
+export default function AppRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<h1>Home</h1>} />
-            <Route path="/test" element={<h1>Testing</h1>} />
-            <Route path="/courses" element={<Index/>} />
-            <Route path="/login" element={<Form/>} />
-            <Route path={`${userTypes.STUDENT}/enrolled`} element={<Enrolled/>} />
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/courses" element={<Index />} />
+
+            {/* Protected Routes */}
+            <Route
+                path={`${userTypes.STUDENT}/enrolled`}
+                element={
+                    <PrivateRoute>
+                        <Enrolled />
+                    </PrivateRoute>
+                }
+            />
             {/* provider routes  */}
             <Route path={`courses/:courseId`} element={<CourseView/>} />
             <Route path={`tracks/:trackId`} element={<TrackView />} />
