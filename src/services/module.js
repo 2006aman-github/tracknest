@@ -8,7 +8,7 @@ import {
   deleteDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../firebase"; // adjust to your project
+import { db } from "../firebase.js"; // adjust to your project
 
 
 

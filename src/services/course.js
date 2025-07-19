@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { db } from "../firebaseconfig";
+import { db } from "../firebase.js";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 const userSchema = z.object({
