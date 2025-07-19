@@ -19,5 +19,7 @@ export const courseSchema = z.object({
   mode: z.enum(["online", "offline"]),
   registrationLink: z.string().url(),
   createdAt: z.any().optional(), // Can be Date or Timestamp
-  approved: z.boolean().optional()
+  approved: z.boolean().optional().default(false),
+  enrolledStudents: z.array(z.string()).optional(),
+  completedStudents: z.array(z.string()).optional(),
 });
