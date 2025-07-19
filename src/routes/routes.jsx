@@ -1,16 +1,30 @@
-import { Routes, Route } from 'react-router-dom'
-import Index from '@/pages/courses'
-import Form from '@/pages/forms/login.jsx'
-import Enrolled from '@/pages/enrolled.jsx'
+import { Routes, Route, Navigate } from "react-router-dom"
+import Login from "@/pages/forms/login"
+import Index from "@/pages/courses.jsx"
+import Enrolled from "@/pages/enrolled"
+import { useSelector } from "react-redux"
 
-export default function Router() {
+function PrivateRoute({ children }) {
+    const isAuth = useSelector((state) => state.auth.isAuth)
+    return isAuth ? children : <Navigate to="/login" />
+}
+
+export default function AppRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<h1>Home</h1>} />
-            <Route path="/test" element={<h1>Testing</h1>} />
-            <Route path="/courses" element={<Index/>} />
-            <Route path="/login" element={<Form/>} />
-            <Route path="/enrolled" element={<Enrolled/>} />
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/courses" element={<Index />} />
+
+            {/* Protected Routes */}
+            <Route
+                path="/enrolled"
+                element={
+                    <PrivateRoute>
+                        <Enrolled />
+                    </PrivateRoute>
+                }
+            />
         </Routes>
     )
 }
