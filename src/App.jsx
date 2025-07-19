@@ -1,25 +1,17 @@
-import Router from './routes/routes';
-import Form from '@/pages/forms/login.jsx';
-import { useSelector } from "react-redux";
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Router from './routes/routes'
+import Navbar from "@/components/navbar.jsx"
 
 function App() {
-  const isAuth = useSelector((state) => state.auth.isAuth);
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     navigate('/login');
-  //   }
-  // }, [isAuth, navigate]);
-
   return (
-    <>
-      {/* {isAuth ? <Router /> : <Form />} */}
-      <Router/>
-    </>
-  );
+    <div className='w-[100vw]'>
+      <div className="fixed z-50 w-full">
+        <Navbar />
+      </div>
+      <div className="pt-16">
+        <Router />
+      </div>
+    </div>
+  )
 }
 
-export default App;
+export default App
