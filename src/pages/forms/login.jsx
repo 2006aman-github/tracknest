@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const Form = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const nav = useNavigate();
     const isAuth = useSelector((state) => state.auth.isAuth);
 
     const [email, setEmail] = useState("");
@@ -21,9 +21,9 @@ const Form = () => {
 
     useEffect(() => {
         if (isAuth) {
-            navigate("/");
+            nav("/");
         }
-    }, [isAuth, navigate]);
+    }, [isAuth, nav]);
 
     return (
         <div className="min-h-screen bg-white flex justify-center items-center">
