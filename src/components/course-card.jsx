@@ -2,6 +2,7 @@ import { Star, Clock, Users, Award, PlayCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLocation } from "react-router-dom";
 
 export const CourseCard = ({
     title,
@@ -20,6 +21,9 @@ export const CourseCard = ({
     progress,
     bought = false,
 }) => {
+    const location = useLocation();
+    const isEnr = location.pathname.includes("enrolled");
+
     const formatStudents = (count) => {
         if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
         return count.toString();
@@ -50,8 +54,8 @@ export const CourseCard = ({
                 <div className="absolute top-4 left-4 z-10">
                     <Badge
                         className={`font-semibold px-3 py-1 ${isFeatured
-                                ? "bg-blue-600 text-white"
-                                : "bg-purple-600 text-white"
+                            ? "bg-blue-600 text-white"
+                            : "bg-purple-600 text-white"
                             }`}
                     >
                         {isFeatured ? "Featured" : "Premium"}
@@ -131,16 +135,18 @@ export const CourseCard = ({
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-xl font-bold text-gray-900">
-                            ${price.current}
-                        </span>
-                        {price.original && (
-                            <span className="text-sm text-gray-500 line-through">
-                                ${price.original}
+                    {!isEnr && (
+                        <div className="flex items-center space-x-2">
+                            <span className="text-xl font-bold text-gray-900">
+                                ${price.current}
                             </span>
-                        )}
-                    </div>
+                            {price.original && (
+                                <span className="text-sm text-gray-500 line-through">
+                                    ${price.original}
+                                </span>
+                            )}
+                        </div>
+                    )}
 
                     <Button
                         size="sm"
