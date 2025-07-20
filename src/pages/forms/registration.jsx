@@ -7,6 +7,8 @@ import { login } from "@/features/auth/authSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { createUserProfile } from "../../services/userProfile";
+import { userTypes } from "../../lib/utils";
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -16,10 +18,14 @@ const Register = () => {
     const [admin, setAdmin] = useState({ email: "", password: "" });
     const [provider, setProvider] = useState({ email: "", password: "" });
 
-    const handleRegister = async (e, creds) => {
+    const handleRegister = async (e, creds, userType) => {
         e.preventDefault();
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, creds.email, creds.password);
+            // make userProfile
+            await createUserProfile(userCredential.user.uid, {userType})
+            alert("Registration successful!");
+            // Dispatch login action
             dispatch(login(userCredential.user));
             navigate("/");
         } catch (err) {
@@ -39,7 +45,7 @@ const Register = () => {
                             </h1>
                             <p className="text-sm text-gray-600 mt-1">Create a regular user account</p>
                         </div>
-                        <form onSubmit={(e) => handleRegister(e, user)} className="space-y-4">
+                        <form onSubmit={(e) => handleRegister(e, user, userTypes.STUDENT)} className="space-y-4">
                             <Input
                                 type="email"
                                 placeholder="User Email"
@@ -62,7 +68,7 @@ const Register = () => {
                 </Card>
 
                 {/* Admin Register */}
-                <Card className="w-[360px] shadow-lg rounded-2xl">
+                {/* <Card className="w-[360px] shadow-lg rounded-2xl">
                     <CardContent className="p-6 space-y-6">
                         <div className="text-center">
                             <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
@@ -90,7 +96,7 @@ const Register = () => {
                             </Button>
                         </form>
                     </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Provider Register */}
                 <Card className="w-[360px] shadow-lg rounded-2xl">
@@ -101,7 +107,7 @@ const Register = () => {
                             </h1>
                             <p className="text-sm text-gray-600 mt-1">Create a provider account</p>
                         </div>
-                        <form onSubmit={(e) => handleRegister(e, provider)} className="space-y-4">
+                        <form onSubmit={(e) => handleRegister(e, provider, userTypes.PROVIDER)} className="space-y-4">
                             <Input
                                 type="email"
                                 placeholder="Provider Email"
