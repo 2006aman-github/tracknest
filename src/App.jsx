@@ -36,7 +36,7 @@ function App() {
   return () => unsubscribe();
 }, []);
   return (
-    <div className='w-[100vw]'>
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
       <div className="fixed z-50 w-full">
         <Navbar />
       </div>

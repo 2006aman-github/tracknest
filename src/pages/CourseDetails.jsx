@@ -3,9 +3,11 @@ import { useLocation, useParams } from "react-router-dom";
 import ModuleForm from "./forms/AddModule";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { useTrackBuilder } from "../hooks/useTrackBuilder";
+import { addModule } from "../services/module";
 
 export default function CourseView() {
-
+const { addItem, items } = useTrackBuilder(); // <-- use the hook
    const location = useLocation();
   const { courseId } = useParams();
  const [course, setCourse] = useState(location.state?.course || null);
@@ -13,6 +15,16 @@ export default function CourseView() {
     const [modules, setModules] = useState([
 ])
 
+
+const handleAdd = (module) => {
+    addItem({
+      type: "module",
+      refId: module.id,
+      title: module.title,
+      duration: module.duration,
+      order: items.length
+    });
+  };
 
 useEffect(() => {
     if (!course && courseId) {
@@ -47,10 +59,17 @@ useEffect(() => {
   if (!course) return <div>Loading course...</div>;
 
 const onAddModule = (newModule) => {
-  setModules(prev => ({
-    ...prev,
-    modules: [...(prev.modules || []), newModule],
-  }));
+  const updatedModules = [...modules, newModule];
+  setModules(updatedModules);
+  addModule(courseId, newModule)
+    .then((addedModule) => {
+      console.log("Module added successfully:", addedModule);
+      setModules((prev) => [...prev, addedModule]);
+    })
+    .catch((error) => {
+      console.error("Error adding module:", error);
+    } );
+  handleAdd(newModule);
 }
 
 
@@ -97,6 +116,7 @@ const onAddModule = (newModule) => {
             </div>
 
          <button
+          onClick={() => handleAdd(mod)}
             className="bg-blue-600 h-fit p-2 cursor-pointer rounded-sm hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
          >
             Add to track

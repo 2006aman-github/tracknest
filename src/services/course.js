@@ -103,6 +103,19 @@ export async function getEnrolledCourses(userId) {
 }
 
 
+export async function getAllCourses() {
+  try {
+    const q = query(collection(db, "courses"));
+    const querySnapshot = await getDocs(q);
+    const courses = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return courses;
+  } catch (err) {
+    console.error("Error fetching all courses:", err);
+    throw err;
+  }
+}
+
+
 export const getCompletedCourses = async (userId) => {
   try {
     const userDoc = await getDoc(doc(db, "userProfiles", userId));

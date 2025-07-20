@@ -145,7 +145,7 @@ export const CourseCard = (course) => {
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                    {!isEnr && (
+                    {/* {!isEnr && (
                         <div className="flex items-center space-x-2">
                             <span className="text-xl font-bold text-gray-900">
                                 ${price.current}
@@ -156,7 +156,7 @@ export const CourseCard = (course) => {
                                 </span>
                             )}
                         </div>
-                    )}
+                    )} */}
                     {course && (
                         
                         <Link to={`/courses/${id}`} state={{course}} className="flex-shrink-0">
