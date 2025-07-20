@@ -9,7 +9,7 @@ const Hero = () => {
           Explore premium and free courses tailored for your growth. Learn from top instructors and stay ahead.
         </p>
         <a
-          href="/explore"
+          href="/courses"
           className="inline-block bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full shadow hover:bg-gray-100 transition"
         >
           Explore Courses
