@@ -15,7 +15,7 @@ import { userTypes } from "../lib/utils"
 import CourseView from "../pages/CourseDetails"
 import TrackView from "../pages/MyTrack"
 import UserProfile from "../pages/UserProfile"
-import { TrackCreator } from "../pages/forms/trackCreator"
+import { TrackCreator } from "../pages/forms/TrackCreator"
 import ExploreCourses from "../pages/exploreCourses"
 import Home from "../pages/Home"
 
