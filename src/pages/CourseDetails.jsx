@@ -80,7 +80,7 @@ const onAddModule = (newModule) => {
             </div>
 
          <button
-                        className="bg-blue-600 h-fit p-2 cursor-pointer rounded-sm hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
+            className="bg-blue-600 h-fit p-2 cursor-pointer rounded-sm hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
          >
             Add to track
          </button>

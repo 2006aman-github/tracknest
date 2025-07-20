@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { db } from "../firebaseconfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { courseSchema } from "./schemas/courseSchema";
 
 const userSchema = z.object({
   name: z.string(),
@@ -22,6 +23,13 @@ const userData = {
 userSchema.parse(userData); // throws if invalid
 
 export async function addCourse(course) {
+  // Validate course against courseSchema
+  courseSchema.parse(course); // throws if invalid
+  // Add createdAt field if not present
+  if (!course.createdAt) {
+    course.createdAt = serverTimestamp(); // Use server timestamp if not provided
+  }
+
   try {
     const docRef = await addDoc(collection(db, "courses"), course);
     console.log("Course added with ID:", docRef.id);
@@ -35,6 +43,7 @@ export async function addCourse(course) {
 
 
 export async function updateCourse(courseId, updatedFields) {
+  courseSchema.partial().parse(updatedFields); // Validate updatedFields against courseSchema
   try {
     const courseRef = doc(db, "courses", courseId);
     await updateDoc(courseRef, updatedFields);

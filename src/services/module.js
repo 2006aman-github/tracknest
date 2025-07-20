@@ -9,11 +9,18 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase"; // adjust to your project
+import { moduleSchema } from "./schemas/moduleSchema";
 
 
 
 // 🔹 Add a new module to a course
 export const addModule = async (courseId, moduleData) => {
+    // Ensure moduleData has necessary fields
+    moduleSchema.parse(moduleData);
+    // Add createdAt field if not present
+    if (!moduleData.createdAt) {
+        moduleData.createdAt = serverTimestamp();
+        }
   const moduleRef = collection(db, "courses", courseId, "modules");
   const newModule = {
     ...moduleData,
@@ -46,6 +53,8 @@ export const getModule = async (courseId, moduleId) => {
 
 // 🔹 Update a module
 export const updateModule = async (courseId, moduleId, updatedData) => {
+    // Ensure updatedData has necessary fields
+    moduleSchema.partial().parse(updatedData);
   const docRef = doc(db, "courses", courseId, "modules", moduleId);
   await updateDoc(docRef, updatedData);
 };
