@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { db } from "../firebaseconfig";
+import { db } from "../firebase.js";
 import { collection, query, where, getDocs, addDoc, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { courseSchema } from "./schemas/courseSchema";
 
