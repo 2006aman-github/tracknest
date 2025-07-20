@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { useSelector } from "react-redux"
 import Logout from "@/components/logout.jsx"
+import { userTypes } from "../lib/utils"
 
 export default function Navbar() {
     const isAuth = useSelector((state) => state.auth.isAuth)
@@ -56,7 +57,7 @@ export default function Navbar() {
                                         {isAuth && (
                                             <li>
                                                 <NavigationMenuLink asChild>
-                                                    <Link to="/enrolled" className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted">
+                                                    <Link to={`${userTypes.STUDENT}/enrolled`} className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted">
                                                         <GraduationCap size={16} />
                                                         Enrolled Courses
                                                     </Link>

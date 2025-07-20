@@ -1,4 +1,4 @@
-import { doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, arrayRemove, setDoc, getDoc, addDoc, collection, serverTimestamp, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // Adjust based on your setup
 import { TrackSchema } from "./schemas/trackSchema";
 
@@ -8,6 +8,9 @@ export const enrollInCourse = async (userId, courseId) => {
   await updateDoc(userRef(userId), {
     enrolledCourses: arrayUnion(courseId),
   });
+  await updateDoc(doc(db, "courses", courseId), {
+  enrolledCount: increment(1),
+});
 };
 
 export const markModuleComplete = async (userId, moduleId) => {

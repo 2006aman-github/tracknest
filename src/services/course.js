@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { db } from "../firebase.js";
-import { collection, query, where, getDocs, addDoc, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { courseSchema } from "./schemas/courseSchema";
+import { en } from "zod/v4/locales";
 
 const userSchema = z.object({
   name: z.string(),
@@ -20,7 +21,7 @@ const userData = {
 };
 
 
-userSchema.parse(userData); // throws if invalid
+// userSchema.parse(userData); // throws if invalid
 
 export async function addCourse(course) {
   // Validate course against courseSchema
@@ -68,6 +69,61 @@ export async function getCoursesByTag(tag) {
     throw err;
   }
 }
+
+
+
+
+export async function getEnrolledCourses(userId) {
+  try {
+    const userRef = doc(db, "userProfiles", userId);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) return [];
+
+    const userProfile = userSnap.data();
+    const enrolledCourses = userProfile.enrolledCourses || [];
+
+    if (enrolledCourses.length === 0) return [];
+
+    const courses = await Promise.all(
+      enrolledCourses.map(async (courseId) => {
+        const courseRef = doc(db, "courses", courseId);
+        const courseSnap = await getDoc(courseRef);
+        return courseSnap.exists()
+          ? { id: courseSnap.id, ...courseSnap.data() }
+          : null;
+      })
+    );
+
+    return courses.filter(Boolean);
+  } catch (err) {
+    console.error("Error fetching enrolled courses:", err);
+    throw err;
+  }
+}
+
+
+export const getCompletedCourses = async (userId) => {
+  try {
+    const userDoc = await getDoc(doc(db, "userProfiles", userId));
+
+    if (!userDoc.exists()) return [];
+
+    const userProfile = userDoc.data();
+    const completedCourses = userProfile.completedCourses || [];
+
+    const coursesPromises = completedCourses.map(async (courseId) => {
+      const courseDoc = await getDoc(doc(db, "courses", courseId));
+      return courseDoc.exists() ? { id: courseDoc.id, ...courseDoc.data() } : null;
+    });
+
+    const courses = await Promise.all(coursesPromises);
+    return courses.filter(Boolean); // remove nulls
+  } catch (err) {
+    console.error("Error fetching completed courses:", err);
+    throw err;
+  }
+};
 
 
 //Fetch Courses by Launch Date (>= or ==)

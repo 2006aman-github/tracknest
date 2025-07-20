@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { userTypes } from "../../lib/utils";
 
 export const userSchema = z.object({
   enrolledCourses: z.array(z.string()).default([]),        // course IDs
@@ -6,5 +7,6 @@ export const userSchema = z.object({
   completedModules: z.array(z.string()).default([]),       // module IDs
   favouriteCourses: z.array(z.string()).default([]),       // course IDs
   skills: z.array(z.string()).default([]),                 // e.g. ["React", "Node.js"]
-  createdAt: z.any().optional(),                           // Firestore timestamp
+  createdAt: z.any().optional(),   
+  userType:  z.enum([userTypes.STUDENT, userTypes.PROVIDER, userTypes.ADMIN]), // user type
 });

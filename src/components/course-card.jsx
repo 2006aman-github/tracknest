@@ -2,16 +2,18 @@ import { Star, Clock, Users, Award, PlayCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export const CourseCard = ({
+export const CourseCard = (course) => {
+    const {
+    id,
     title,
     description,
     instructor,
-    image,
+    image ="",
     duration,
-    students,
     rating,
+    enrolledCount,
     totalRatings,
     price,
     level,
@@ -20,13 +22,13 @@ export const CourseCard = ({
     isPremium = false,
     progress,
     bought = false,
-}) => {
+} = course;
     const location = useLocation();
     const isEnr = location.pathname.includes("enrolled");
 
     const formatStudents = (count) => {
         if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
-        return count.toString();
+        return count?.toString();
     };
 
     const getLevelColor = (level) => {
@@ -47,6 +49,7 @@ export const CourseCard = ({
         if (bought) return "Start Now";
         return "Enroll Now";
     };
+    
 
     return (
         <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2 cursor-pointer bg-white">
@@ -64,11 +67,18 @@ export const CourseCard = ({
             )}
 
             <div className="relative overflow-hidden">
-                <img
-                    src={image}
-                    alt={title}
-                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+                {image ? (
+
+  <img
+      src={image}
+      alt={title}
+      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+  />
+) : (
+  <div className="bg-gray-200 w-full h-40 flex items-center justify-center">
+    <span>No Image</span>
+  </div>
+)}
                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <Button
                         size="lg"
@@ -125,7 +135,7 @@ export const CourseCard = ({
 
                     <div className="flex items-center space-x-1">
                         <Users className="h-4 w-4" />
-                        <span>{formatStudents(students)}</span>
+                        <span>{enrolledCount}</span>
                     </div>
 
                     <div className="flex items-center space-x-1">
@@ -147,13 +157,17 @@ export const CourseCard = ({
                             )}
                         </div>
                     )}
-
+                    {course && (
+                        
+                        <Link to={`/courses/${id}`} state={{course}} className="flex-shrink-0">
                     <Button
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 hover:scale-105"
-                    >
+                        >
                         {getButtonLabel()}
                     </Button>
+                    </Link>
+                    )}
                 </div>
             </div>
         </Card>

@@ -1,21 +1,50 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import ModuleForm from "./forms/AddModule";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function CourseView() {
+
+   const location = useLocation();
+  const { courseId } = useParams();
+ const [course, setCourse] = useState(location.state?.course || null);
+
     const [modules, setModules] = useState([
-  {
-    title: "Intro to AI",
-    description: "Basics of Artificial Intelligence",
-    duration: 2,
-  },
-  {
-    title: "ML Foundations",
-    description: "Core machine learning concepts",
-    duration: 3,
-  },
 ])
 
+
+useEffect(() => {
+    if (!course && courseId) {
+    
+      const fetchCourse = async () => {
+        const docRef = doc(db, "courses", courseId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setCourse({ id: docSnap.id, ...docSnap.data() });
+        }
+      };
+      fetchCourse();
+    }
+  }, [course, courseId]);
+
+  useEffect(() => {
+    const fetchModules = async () => {
+     
+           try {
+        const modulesRef = collection(db, "courses", courseId, "modules");
+        const snapshot = await getDocs(modulesRef);
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setModules(data);
+      } catch (err) {
+        console.error("Error fetching modules:", err);
+      } 
+    };
+
+    fetchModules();
+  }, [courseId]);
+
+  if (!course) return <div>Loading course...</div>;
 
 const onAddModule = (newModule) => {
   setModules(prev => ({
@@ -25,21 +54,9 @@ const onAddModule = (newModule) => {
 }
 
 
-    const course = {
-        title: "Sample Course",
-        description: "This is a sample course description.",
-        instructor: "John Doe",
-        launchDate: "2023-10-01",
-        duration: 10,
-        tags: ["React", "JavaScript", "Web Development"],
-        createdAt: { seconds: 1700000000 },
-        enrolledStudentsNo: 56,
-        completedStudentsNo: 89,
-    };
-
+ 
     // access from redux 
-    // const course = useSelector((state) => state.course.selectedCourse);
-    const { courseId } = useParams();
+   
     const userRole = "provider"; // This would typically come from context or props
 
   return (
@@ -56,11 +73,11 @@ const onAddModule = (newModule) => {
   <div className="grid grid-cols-2 gap-4">
     <div className="bg-green-100 text-green-800 p-4 rounded shadow">
       <p className="text-sm">Enrolled Students</p>
-      <p className="text-2xl font-bold">{course.enrolledStudentsNo?.length || 0}</p>
+      <p className="text-2xl font-bold">{course.enrolledCount?.length || 0}</p>
     </div>
     <div className="bg-blue-100 text-blue-800 p-4 rounded shadow">
       <p className="text-sm">Completed Students</p>
-      <p className="text-2xl font-bold">{course.completedStudentsNo?.length || 0}</p>
+      <p className="text-2xl font-bold">{course.completedCount?.length || 0}</p>
     </div>
   </div>
 </div>
@@ -122,7 +139,7 @@ const onAddModule = (newModule) => {
 
       {/* 🔎 Extra Info */}
       <div className="text-sm text-gray-400 pt-4 border-t">
-        Created At: {new Date(course.createdAt.seconds * 1000).toLocaleString()}
+        Created At: {new Date(course.createdAt?.seconds * 1000).toLocaleString()}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Enrolled from "@/pages/enrolled"
 import { useSelector } from "react-redux"
 import Registration from '@/pages/forms/registration.jsx'
 
-function PrivateRoute({ children }) {
+export function PrivateRoute({ children }) {
     const isAuth = useSelector((state) => state.auth.isAuth)
     return isAuth ? children : <Navigate to="/login" />
 }
@@ -14,6 +14,7 @@ import CourseForm from "../pages/forms/AddCourse"
 import { userTypes } from "../lib/utils"
 import CourseView from "../pages/CourseDetails"
 import TrackView from "../pages/MyTrack"
+import UserProfile from "../pages/UserProfile"
 
 export default function AppRoutes() {
     return (
@@ -28,10 +29,12 @@ export default function AppRoutes() {
                 path={`${userTypes.STUDENT}/enrolled`}
                 element={
                     <PrivateRoute>
-                        <Enrolled />
+                        
+                        <Index fetchArchived={false} />
                     </PrivateRoute>
                 }
             />
+            <Route path={'/profile'} element={<PrivateRoute><UserProfile /></PrivateRoute>} />
             {/* provider routes  */}
             <Route path={`courses/:courseId`} element={<CourseView/>} />
             <Route path={`tracks/:trackId`} element={<TrackView />} />

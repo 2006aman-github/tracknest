@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
+import { getUserProfile } from "../../services/userProfile";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -21,7 +22,14 @@ const Login = () => {
         e.preventDefault();
         try {
             const userCredential = await signInWithEmailAndPassword(auth, creds.email, creds.password);
-            dispatch(login(userCredential.user));
+            const plainUser = {
+  uid: userCredential.user.uid,
+  email: userCredential.user.email,
+  displayName: userCredential.user.displayName,
+  photoURL: userCredential.user.photoURL,
+};
+            const userProfile = await getUserProfile(userCredential.user.uid);
+            dispatch(login({user:plainUser, userProfile: {...userProfile,  createdAt: userProfile.createdAt?.toDate?.().toISOString?.() || null,}}));
         } catch (err) {
             alert(err.message);
         }
